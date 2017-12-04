@@ -8,14 +8,24 @@
     <title>GifTastic!</title>
 
     <!--Bootstrap CDN-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <!--Style CSS-->
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 
 <body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-3">GifTastic!</h1>
+            <h2>Built using the giphy api.</h2>
+            <p class="lead">Click on a topic to pull up some gifs! Or add a topic of your own using the form on the right!</p>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-12" id="topic-buttons">
@@ -23,10 +33,24 @@
         </div>
         <div class="row">
             <div class="col-md-9" id="gif-display">
-                f
             </div>
             <div class="col-md-3" id="add-topic">
-                f
+                <form>
+                    <div class="form-group">
+                        <label for="add-topic">Add Topic:</label>
+                        <input type="email" class="form-control" id="add-topic" placeholder="For Honor">
+                        <button type="submit" class="btn btn-info btn-sm mt-2">Add Topic</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="result-number">Number of results:</label>
+                        <select class="form-control" id="result-number">
+                            <option>10</option>
+                            <option>1</option>
+                            <option>5</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
