@@ -22,15 +22,40 @@ let renderTopicButton = function() {
     });
 }
 
-
-$("#submit-button").on("click", function(){
-    event.preventDefault();
+let addTopicButton = function() {
     let newTopic = $("#topic-input").val().trim()
     topics.push(newTopic)
     $("#topic-buttons").empty()
     $("#topic-input").val("")
-    renderTopicButton()
+}
+
+let createQueryURL = function(game) {
+    return "http://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=10"
+}
+
+$(".game-topic").on("click", function(){
+
+    var game = $(this).attr("data-title")
+
+    var queryURL = createQueryURL(game)
+
+    console.log(game)
+    console.log(queryURL)
+    $.ajax({
+        url:queryURL,
+        method: "GET"
+    }).done(function(result){
+        console.log(result)
+    })
 })
+
+$("#submit-button").on("click", function(){
+    event.preventDefault()
+    addTopicButton()
+    renderTopicButton()
+    createQueryURL()
+})
+
 
 
 renderTopicButton();
