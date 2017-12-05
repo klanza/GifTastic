@@ -22,4 +22,15 @@ let renderTopicButton = function() {
     });
 }
 
+
+$("#submit-button").on("click", function(){
+    event.preventDefault();
+    let newTopic = $("#topic-input").val().trim()
+    topics.push(newTopic)
+    $("#topic-buttons").empty()
+    $("#topic-input").val("")
+    renderTopicButton()
+})
+
+
 renderTopicButton();
