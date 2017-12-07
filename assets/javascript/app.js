@@ -29,26 +29,51 @@ let addTopicButton = function() {
     $("#topic-input").val("")
 }
 
-let createQueryURL = function(game) {
-    return "http://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=10"
+//Function to create URL for AJAX call
+//WHY?: Do I need to pass game and numberResults as arguments? I have to do the same thing when in on-click (line 44)
+let createQueryURL = function(game, numberResults) {
+    return "http://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=" + numberResults
 }
 
-$(".game-topic").on("click", function(){
+//STILL IMAGE
+//
 
-    var game = $(this).attr("data-title")
 
-    var queryURL = createQueryURL(game)
+//Function to generate image with necessary properties
+let createImg = function(){
+    let image = ("<img>").attr("src", stillImgURL)
+    let stillImgURL = result.data[0].images.fixed_height_still.url
+    let animatedImgURL = result.data[0].images.fixed_height_still.url
+    // $("#gif-holder").append(stillImgURL)
 
-    console.log(game)
+}
+
+$("#topic-buttons").on("click", ".game-topic", function(){
+    //Gets title of button clicked
+    let game = $(this).attr("data-title")
+    //Gets selected option to return number of results
+    let numberResults = $("#result-number").val()
+    //Sets variable for URL, runs function to generate URL
+    let queryURL = createQueryURL(game, numberResults)
+
+    
+    console.log(numberResults)
     console.log(queryURL)
+
+    //AJAX Call for JSON with giphy information
     $.ajax({
         url:queryURL,
         method: "GET"
     }).done(function(result){
-        console.log(result)
-    })
+        (result.data).forEach(function(result) {
+            console.log("hi")
+        });
+                })
 })
 
+
+//Works when button is clicked, not when enter is pressed
+//Unsure how to correct
 $("#submit-button").on("click", function(){
     event.preventDefault()
     addTopicButton()
