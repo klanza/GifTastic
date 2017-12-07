@@ -1,8 +1,14 @@
-let topics = ["Dota 2", "Pokemon", "Mario", "Gears of War", "The Last of Us", "Sonic", "Metroid", "Counter-Strike", "Halo",
-              "Dark Souls", "Bloodborne", "The Legend of Zelda", "Doom", "Portal", "Half-Life", "Tetris", "Final Fantasy", 
-              "Grand Theft Auto", "Street Fighter", "Megaman", "Metal Gear Solid", "Castlevania", "Warcraft", "Bioshock"]
+//_____________STATIC VARIABLES_____________
 
-let createTopicButton = function(game){
+//Array of example topics to be generated on page load
+let topics = ["Dota 2", "Pokemon", "Mario", "Gears of War", "The Last of Us", "Sonic", "Metroid", "Counter-Strike", "Halo",
+    "Dark Souls", "Bloodborne", "The Legend of Zelda", "Doom", "Portal", "Half-Life", "Tetris", "Final Fantasy",
+    "Grand Theft Auto", "Street Fighter", "Megaman", "Metal Gear Solid", "Castlevania", "Warcraft", "Bioshock"]
+
+//_____________FUNCTIONS_____________
+
+// Function to create buttons from the topic
+let createTopicButton = function (game) {
     // Create button
     let btn = $("<button>")
         // Add class to button
@@ -13,16 +19,17 @@ let createTopicButton = function(game){
         .text(game)
     // Return button to insert into DOM
     return btn
-
 }
 
-let renderTopicButton = function() {
+//Function that creates buttons for array of topics, and appends them to the appropriate area on page
+let renderTopicButton = function () {
     topics.forEach((value) => {
         $("#topic-buttons").append(createTopicButton(value))
     });
 }
 
-let addTopicButton = function() {
+//Function to create a new topic button that can be clicked to generate images
+let addTopicButton = function () {
     let newTopic = $("#topic-input").val().trim()
     topics.push(newTopic)
     $("#topic-buttons").empty()
@@ -31,50 +38,62 @@ let addTopicButton = function() {
 
 //Function to create URL for AJAX call
 //WHY?: Do I need to pass game and numberResults as arguments? I have to do the same thing when in on-click (line 44)
-let createQueryURL = function(game, numberResults) {
+let createQueryURL = function (game, numberResults) {
     return "http://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=" + numberResults
 }
 
-//STILL IMAGE
-//
-
-
 //Function to generate image with necessary properties
-let createImg = function(){
-    let image = ("<img>").attr("src", stillImgURL)
-    let stillImgURL = result.data[0].images.fixed_height_still.url
-    let animatedImgURL = result.data[0].images.fixed_height_still.url
-    // $("#gif-holder").append(stillImgURL)
-
+//Very long function, potentially break down to smaller parts
+let createImg = function (result) {
+    let stillImgURL = result.images.fixed_height_still.url
+    let animatedImgURL = result.images.fixed_height.url
+    let image = $("<img>").attr("src", stillImgURL)
+    image.attr("data-still", stillImgURL)
+    image.attr("data-animate", animatedImgURL)
+    image.attr("data-state", "still")
+    image.addClass("gif m-2")
+    $("#gif-holder").append(image)
 }
 
-$("#topic-buttons").on("click", ".game-topic", function(){
+$("#topic-buttons").on("click", ".game-topic", function () {
     //Gets title of button clicked
     let game = $(this).attr("data-title")
     //Gets selected option to return number of results
     let numberResults = $("#result-number").val()
     //Sets variable for URL, runs function to generate URL
     let queryURL = createQueryURL(game, numberResults)
-
-    
-    console.log(numberResults)
-    console.log(queryURL)
-
     //AJAX Call for JSON with giphy information
     $.ajax({
-        url:queryURL,
+        url: queryURL,
         method: "GET"
-    }).done(function(result){
-        (result.data).forEach(function(result) {
-            console.log("hi")
+    }).done(function (result) {
+        (result.data).forEach(function (result) {
+            createImg(result)
+            console.log(result)
         });
-                })
+    })
 })
 
+$("#gif-display").on("click", ".gif", function () {
+    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+    var state = $(this).attr("data-state");
+    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+    // Then, set the image's data-state to animate
+    // Else set src to the data-still value
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+    console.log(this)
+    console.log(state)
+});
 
 //Works when button is clicked, not when enter is pressed
 //Unsure how to correct
-$("#submit-button").on("click", function(){
+$("#submit-button").on("click", function () {
     event.preventDefault()
     addTopicButton()
     renderTopicButton()
