@@ -12,7 +12,7 @@ let createTopicButton = function (game) {
     // Create button
     let btn = $("<button>")
         // Add class to button
-        .addClass("game-topic m-1")
+        .addClass("game-topic m-1 btn-primary")
         // Add data-title attribute
         .attr("data-title", game)
         // Create text inside the HTML element
@@ -45,17 +45,24 @@ let createQueryURL = function (game, numberResults) {
 //Function to generate image with necessary properties
 //Very long function, potentially break down to smaller parts
 let createImg = function (result) {
+    let imgDiv = $("<div>")
+    imgDiv.attr("id", result.id)
+    $("#gif-holder").append(imgDiv)
     let stillImgURL = result.images.fixed_height_still.url
     let animatedImgURL = result.images.fixed_height.url
     let image = $("<img>").attr("src", stillImgURL)
     image.attr("data-still", stillImgURL)
     image.attr("data-animate", animatedImgURL)
     image.attr("data-state", "still")
-    image.addClass("gif m-2")
-    $("#gif-holder").append(image)
+    image.addClass("gif my-2 img-fluid")
+    $("#"+result.id).append(image)
+    $("#"+result.id).append("<br>")
+    $("#"+result.id).append("Rating: " + result.rating)
 }
 
 $("#topic-buttons").on("click", ".game-topic", function () {
+    //Empty container of prior images
+    $("#gif-holder").empty()
     //Gets title of button clicked
     let game = $(this).attr("data-title")
     //Gets selected option to return number of results
@@ -67,10 +74,12 @@ $("#topic-buttons").on("click", ".game-topic", function () {
         url: queryURL,
         method: "GET"
     }).done(function (result) {
-        (result.data).forEach(function (result) {
-            createImg(result)
-            console.log(result)
+        //I want to rewrite this better, still unsure how
+        (result.data).forEach(function (result, i) {
+            createImg(result, i)
         });
+        // Alternative method
+        // (result.data).forEach(createImg)
     })
 })
 
@@ -87,19 +96,18 @@ $("#gif-display").on("click", ".gif", function () {
         $(this).attr("src", $(this).attr("data-still"));
         $(this).attr("data-state", "still");
     }
-    console.log(this)
-    console.log(state)
 });
 
 //Works when button is clicked, not when enter is pressed
-//Unsure how to correct
+//Unsure how to correct without causing page to refresh
 $("#submit-button").on("click", function () {
+    //Prevent enter from submitting form and refresh page
     event.preventDefault()
+    //Run functions to add buttons with appropriate IDs and classes, rewrites whole array (for practice)
     addTopicButton()
     renderTopicButton()
     createQueryURL()
 })
-
 
 
 renderTopicButton();
