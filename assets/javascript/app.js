@@ -39,7 +39,7 @@ let addTopicButton = function () {
 //Function to create URL for AJAX call
 //WHY?: Do I need to pass game and numberResults as arguments? I have to do the same thing when in on-click (line 44)
 let createQueryURL = function (game, numberResults) {
-    return "http://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=" + numberResults
+    return "https://api.giphy.com/v1/gifs/search?q=" + game + "&api_key=iXJhjmLnX9twkBa8Z8kjyyHWBBEimFE4&limit=" + numberResults
 }
 
 //Function to generate image with necessary properties
